@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> When using this fork of the webauthn proxy make sure to fork it and update the "Privacy Policy & Imprint" link to your own!
+
 ![WebAuthn Proxy Login Page](/assets/images/login.gif)
 
 A standalone reverse-proxy to enforce Webauthn authentication. It can be inserted in front of sensitive services or even chained with other proxies (e.g. OAuth, MFA) to enable a layered security model.
