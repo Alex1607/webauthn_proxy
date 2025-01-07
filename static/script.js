@@ -1,15 +1,24 @@
 let errorMessage = message => {
-    $('#errorMessages').text(message);
-    $('#successMessages').text('');
+    document.getElementById('errorMessages').textContent = message;
+    document.getElementById('errorMessages').hidden = false;
+    document.getElementById('successMessages').textContent = '';
+    document.getElementById('successMessages').hidden = true;
 };
 
 let successMessage = message => {
-    $('#errorMessages').text('');
-    $('#successMessages').text(message);
+    document.getElementById('errorMessages').textContent = '';
+    document.getElementById('errorMessages').hidden = true;
+    document.getElementById('successMessages').textContent = message;
+    document.getElementById('successMessages').hidden = false;
+};
+
+let hideMessages = () => {
+    document.getElementById('errorMessages').hidden = true;
+    document.getElementById('successMessages').hidden = true;
 };
 
 let preformattedMessage = message => {
-    $('#preformattedMessages').text(message);
+    document.getElementById('preformattedMessages').textContent = message;
 };
 
 let browserCheck = () => {
@@ -52,23 +61,21 @@ let formatFinishLoginParams = assertion => JSON.stringify({
 });
 
 let registerUser = () => {
-    let username = $('#username').val();
+    let usernameInput = document.getElementById('username');
+    let username = usernameInput.value;
 
     if (username === '') {
         errorMessage('Please enter a valid username');
-	    return;
+        return;
     }
 
-	$.get(
-        '/webauthn/register/get_credential_creation_options?username=' + encodeURIComponent(username),
-        null,
-        data => data,
-        'json')
+    fetch(`/webauthn/register/get_credential_creation_options?username=${encodeURIComponent(username)}`)
+        .then(response => response.json())
         .then(credCreateOptions => {
             credCreateOptions.publicKey.challenge = bufferDecode(credCreateOptions.publicKey.challenge);
             credCreateOptions.publicKey.user.id = bufferDecode(credCreateOptions.publicKey.user.id);
             if (credCreateOptions.publicKey.excludeCredentials) {
-                for (cred of credCreateOptions.publicKey.excludeCredentials) {
+                for (let cred of credCreateOptions.publicKey.excludeCredentials) {
                     cred.id = bufferDecode(cred.id);
                 }
             }
@@ -77,17 +84,18 @@ let registerUser = () => {
                 publicKey: credCreateOptions.publicKey
             });
         })
-        .then(cred => $.post(
-            '/webauthn/register/process_registration_attestation?username=' + encodeURIComponent(username),
-            formatFinishRegParams(cred),
-            data => data,
-            'json'))
+        .then(cred => fetch(`/webauthn/register/process_registration_attestation?username=${encodeURIComponent(username)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: formatFinishRegParams(cred)
+        }))
+        .then(response => response.json())
         .then(success => {
             successMessage(success.Message);
             preformattedMessage(success.Data);
         })
         .catch(error => {
-            if(error.hasOwnProperty("responseJSON")){
+            if (error.responseJSON) {
                 errorMessage(error.responseJSON.Message);
             } else {
                 errorMessage(error);
@@ -96,38 +104,38 @@ let registerUser = () => {
 };
 
 let authenticateUser = () => {
-    let username = $('#username').val();
+    let usernameInput = document.getElementById('username');
+    let username = usernameInput.value;
+
     if (username === '') {
         errorMessage('Please enter a valid username');
         return;
     }
 
-    $.get(
-        '/webauthn/login/get_credential_request_options?username=' + encodeURIComponent(username),
-        null,
-        data => data,
-        'json')
+    fetch(`/webauthn/login/get_credential_request_options?username=${encodeURIComponent(username)}`)
+        .then(response => response.json())
         .then(credRequestOptions => {
             credRequestOptions.publicKey.challenge = bufferDecode(credRequestOptions.publicKey.challenge);
             credRequestOptions.publicKey.allowCredentials.forEach(listItem => {
-              listItem.id = bufferDecode(listItem.id)
+                listItem.id = bufferDecode(listItem.id);
             });
 
             return navigator.credentials.get({
-              publicKey: credRequestOptions.publicKey
+                publicKey: credRequestOptions.publicKey
             });
         })
-        .then(assertion => $.post(
-            '/webauthn/login/process_login_assertion?username=' + encodeURIComponent(username),
-            formatFinishLoginParams(assertion),
-            data => data,
-            'json'))
+        .then(assertion => fetch(`/webauthn/login/process_login_assertion?username=${encodeURIComponent(username)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: formatFinishLoginParams(assertion)
+        }))
+        .then(response => response.json())
         .then(success => {
             successMessage(success.Message);
             window.location.reload();
         })
         .catch(error => {
-            if(error.hasOwnProperty("responseJSON")){
+            if (error.responseJSON) {
                 errorMessage(error.responseJSON.Message);
             } else {
                 errorMessage(error);

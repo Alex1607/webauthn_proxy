@@ -1,81 +1,70 @@
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>WebAuthn Proxy Login</title>
-        <link rel="icon" type="image/x-icon" href="/webauthn/static/favicon.ico" />
-        <link rel="stylesheet" type="text/css" href="/webauthn/static/styles.css"  />
-        <script src="/webauthn/static/jquery-3.6.3.min.js"></script>
-        <script src="/webauthn/static/script.js"></script>
-        <script>
-            const registerLinkClick = (defaultUsername) => {
-                let uri = "/webauthn/register";
-                if (defaultUsername) {
-                    uri = uri + `?default_username=${defaultUsername}`;
-                }
-                window.location.href = uri;
-            };
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="/webauthn/static/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/webauthn/static/styles.css"/>
+    <script src="/webauthn/static/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (browserCheck()) {
+                const usernameInput = document.getElementById("username");
+                const loginButton = document.getElementById("loginButton");
 
-            $(document).ready(() => {
-                if (browserCheck()) {
-                    $('#username').keyup(function(e) {
-                        if ($("#username").is(":focus") && event.key == "Enter") {
-                            authenticateUser();
-                        }
-                    });
-                    $('#loginButton').click(authenticateUser);
-
-                    // Prepopulate the username field if specified
-                    let queryString = window.location.search;
-                    let urlParams = new URLSearchParams(queryString);
-                    let username = null;
-                    if (urlParams.has('default_username')) {
-                        username = urlParams.get('default_username');
-                    } else {
-                        let cookies = document.cookie.split(';');
-                        for (let i = 0; i < cookies.length; i++) {
-                            let parts = cookies[i].split('=');
-                            if (parts[0].trim() === "webauthn-proxy-username") {
-                                username = decodeURIComponent(parts[1]);
-                                break;
-                            }
-                        }
-                        // From the future: the below code works only in Chrome.
-                        // let cookie = cookieStore.get("webauthn-proxy-username");
-                        // const cookieValue = () => {
-                        //     cookie.then((a) => {
-                        //         $('#username').val(a.value);
-                        //         $('#registerLink').click(registerLinkClick.bind(registerLinkClick, a.value));
-                        //     })
-                        //     .catch(error => {})
-                        // };
-                        // cookieValue();
+                // Handle "Enter" key press in the username field
+                usernameInput.addEventListener("keyup", (event) => {
+                    if (document.activeElement === usernameInput && event.key === "Enter") {
+                        authenticateUser();
                     }
+                });
 
-                    // Set focus and value to the username field
-                    $('#username').focus();
-                    $('#username').val(username);
+                // Handle login button click
+                loginButton.addEventListener("click", authenticateUser);
 
-                    // Click handler for the "register" link
-                    $('#registerLink').click(registerLinkClick.bind(registerLinkClick, username));
+                // Prepopulate the username field if specified
+                let username = null;
+
+                let cookies = document.cookie.split(';');
+                for (const element of cookies) {
+                    let parts = element.split('=');
+                    if (parts[0].trim() === "webauthn-proxy-username") {
+                        username = decodeURIComponent(parts[1]);
+                        break;
+                    }
                 }
-            });
-        </script>
-    </head>
-    <body>
-        <div id="form">
-            <img src="/webauthn/static/title-image.png" />
-            <div id="errorMessages" class="errorMessageText"></div>
-            <div id="successMessages" class="successMessageText"></div>
-            <br />
-            <table>
-                <tr>
-                    <td>Authenticate:</td>
-                    <td><input type="text" name="username" id="username" size="30" autocomplete="off" data-1p-ignore /></td>
-                    <td><button id="loginButton">Login</button></td>
-                </tr>
-            </table>
-            <br />
-            New User? <a id="registerLink">Register</a>
-        </div>
-    </body>
+
+                // Set focus and value to the username field
+                usernameInput.focus();
+                usernameInput.value = username || "";
+            }
+        });
+    </script>
+</head>
+<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="shadowdiv">
+    <div class="loginform">
+        <p class="title">Login</p>
+    </div>
+    <hr class="divider">
+    <div id="errorMessages" class="alert alert-error center errorMessageText" hidden></div>
+    <div id="successMessages" class="alert alert-success center successMessageText" hidden></div>
+    <div id="form">
+        <input type="text" id="username" name="username" placeholder="Username" class="inputfield" size="30"
+               autocomplete="off" data-1p-ignore>
+
+        <label class="rememberme marginbutton"><input type="checkbox" name="checkbox" id="checkbox"
+                                                      class="marginbutton" checked>Remember Username</label>
+        <br>
+        <a onclick="alert('Please contact a administrator!')" class="loginIssues">Can't login?</a>
+        <button id="loginButton" class="rounded-button submit">Login</button>
+    </div>
+    <div class="undertext">
+        <a href="/webauthn/register" style="float: left;">Register</a>
+        <a href="https://pluoi.com/info" style="float: right;">Privacy Policy &amp; Imprint</a>
+    </div>
+</div>
+</body>
 </html>

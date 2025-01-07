@@ -6,11 +6,23 @@
         <link rel="stylesheet" type="text/css" href="/webauthn/static/styles.css"  />
     </head>
     <body>
-        <div id="form">
-            <img src="/webauthn/static/title-image.png" />
-            <div id="successMessages" class="successMessageText">Successfully Authenticated</div>
-            <br />
-            <a href="/webauthn/logout">Logout</a>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <div class="shadowdiv">
+        <div class="loginform">
+            <p class="title">Welcome!</p>
         </div>
+        <hr class="divider">
+        <div id="form">
+            <div id="successMessages" class="alert alert-success center successMessageText">You are now logged in, please navigate to your desired site.</div>
+
+            <br>
+            <a href="/webauthn/logout" class="loginIssues">Logout</a>
+        </div>
+        <div class="undertext">
+            <a href="https://pluoi.com/info" style="float: right;">Privacy Policy &amp; Imprint</a>
+        </div>
+    </div>
     </body>
 </html>

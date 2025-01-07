@@ -1,44 +1,234 @@
-body {
-    font-family: "Open Sans", sans-serif;
-    font-size: 1.125rem;
-    color: #888;
-    font-weight: 400;
+@font-face {
+    font-family: 'Roboto';
+    src: url(roboto.woff);
+}
+
+html {
+    background: url(background.svg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
 }
 
 a {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
+    text-decoration: none;
 }
 
-button {
-    cursor: pointer;
+a:visited {
+    text-decoration: none;
+    color:rgb(70, 81, 146);
 }
 
-#form {
+p {
+    color: rgb(35, 35, 35);
+}
+
+.center {
     text-align: center;
 }
 
-#form table {
-    margin-left: auto;
+.small {
+    font-size: xx-small;
+}
+
+.alert {
+    color: white;
+    width: 100%;
     margin-right: auto;
+    margin-left: auto;
+    padding: .5em;
+    border-radius: .5em;
+    box-shadow: 0 0 2px #00000080;
+    margin-bottom: 1em;
+    box-sizing: border-box;
+    font-family: Roboto, Helvetica, serif;
 }
 
-#successMessages {
-    color: green;
+.alert-success {
+    background-color: #43A047;
 }
 
-#errorMessages {
-    color: red;
+.alert-error {
+    background-color: #F44336;
 }
 
-#preformattedMessages {
-    font-family: monospace;
-    /* white-space: pre;*/
+.alert-info {
+    background-color: rgb(54, 98, 244);
 }
 
-#copyButton {
-    height: 30px;
-    width: 35px;
-    vertical-align: top;
+*:focus {
+    outline: none;
+}
+
+.shadowdiv {
+    background: white;
+    padding: 1em;
+    box-shadow: 0 0 3px 1px #BDBDBD;
+    border-radius: 1em;
+}
+
+.divider {
+    width: 10em;
+    border-bottom: none;
+    /*border-top-color: #bdbdbd;*/
+    margin-bottom: 1.5em;
+    border-color: white;
+}
+
+.rounded-button {
+    margin: 0 auto;
+    background: #2196F3;
+    border-radius: 2.75em;
+    padding: 0.5em 3em;
+    border: none;
+    box-shadow: 0 0 3px 0 #BDBDBD;
+    font-size: unset;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: .5em;
+    cursor: pointer;
+    background-color: #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b7b7b7;
+    border-radius: .5em;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: darkgray;
+    cursor: pointer;
+}
+
+.shadowdiv {
+    max-width: 26em;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title {
+    font-size: 2.5em;
+}
+
+.rememberme {
+    margin-top: -3em;
+    font-family: Roboto, serif;
+    color: #505050;
+}
+
+.undertext {
+    position: absolute;
+    font-size: 13px;
+    font-family: Roboto, serif;
+    right: 1em;
+    left: 1em;
+    top: auto;
+    margin-top: 4em;
+    color: #505050;
+}
+
+a {
+    color: inherit;
+}
+
+a:visited {
+    color: inherit;
+}
+
+.inputfield {
+    border-radius: 0.5em;
+    border: solid 1px #E0E0E0;
+    font-size: x-large;
+    margin-bottom: 0.5em;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 20px;
+}
+
+.submit {
+    border-radius: 0.25em;
+    padding: 0.5em 1em;
+    float: right;
+}
+
+.loginIssues {
+    font-family: Roboto, serif;
+    float: left;
+    font-size: smaller;
+    padding: .6em 5px;
+    color: rgb(70, 81, 146) !important;
+    cursor: pointer;
+}
+
+.marginbutton {
+    margin-bottom: 2em;
+}
+
+input:invalid {
+    box-shadow: 0 0 5px 0px #f75454;
+    animation: pulsate 1s ease-out infinite;
+}
+
+@media only screen and (max-width: 900px) {
+    .shadowdiv {
+        width: 90%
+    }
+}
+
+.invalid {
+    box-shadow: 0 0 5px 0 #f75454;
+    animation: pulsate 1s ease-out infinite;
+}
+
+@-webkit-keyframes pulsate {
+    0% {
+        box-shadow: 0 0 5px rgb(255, 0, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 5px #f75454;
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgb(255, 0, 0);
+    }
+}
+
+.twofainfo {
+    font-size: large;
+    color: rgb(124, 124, 124);
+    padding: .3em 5px;
+    cursor: pointer;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.title {
+    font-size: xx-large;
+    margin: .5em;
+    font-family: Roboto, serif;
+    text-align: center;
+}
+
+.description {
+    font-weight: 500;
+    font-family: Roboto, serif;
 }

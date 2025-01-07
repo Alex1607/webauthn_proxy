@@ -12,13 +12,13 @@ import (
 	"time"
 
 	u "github.com/Quiq/webauthn_proxy/user"
-	util "github.com/Quiq/webauthn_proxy/util"
+	"github.com/Quiq/webauthn_proxy/util"
 
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/gorilla/sessions"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	yaml "gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v3"
 )
 
 type Configuration struct {
@@ -243,12 +243,12 @@ func main() {
 	logger.Fatal(http.ListenAndServe(listenAddress, r))
 }
 
-// Root page
+// HandleIndex Root page
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/webauthn/login", http.StatusTemporaryRedirect)
 }
 
-// /webauthn/auth - Check if user has an authenticated session
+// HandleAuth /webauthn/auth - Check if user has an authenticated session
 // This endpoint can be used for internal nginx checks.
 // Also this endpoint prolongs the user session by soft limit interval.
 func HandleAuth(w http.ResponseWriter, r *http.Request) {
@@ -330,7 +330,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// /webauthn/logout - Logout page
+// HandleLogout /webauthn/logout - Logout page
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	_, sessionStore, err := checkOrigin(r)
 	if err != nil {
@@ -346,7 +346,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/webauthn/login", http.StatusTemporaryRedirect)
 }
 
-// /webauthn/verify - one-time verification if user has recently authenticated, useful as 2FA check.
+// HandleVerify /webauthn/verify - one-time verification if user has recently authenticated, useful as 2FA check.
 func HandleVerify(w http.ResponseWriter, r *http.Request) {
 	_, _, err := checkOrigin(r)
 	if err != nil {
